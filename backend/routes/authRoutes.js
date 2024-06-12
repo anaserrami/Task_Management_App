@@ -16,7 +16,7 @@ router.post('/signup', async (req, res) => {
                 email,
                 phone,
                 password: hashedPassword,
-                role: 'ADMIN'
+                role: 'USER'
             }
         });
         const token = generateToken(user.id, user.role);

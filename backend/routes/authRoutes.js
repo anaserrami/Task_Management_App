@@ -16,7 +16,7 @@ router.post('/signup', async (req, res) => {
                 email,
                 phone,
                 password: hashedPassword,
-                role: 'USER'
+                role: 'ADMIN'
             }
         });
         const token = generateToken(user.id);
@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
 
 // Get user profile
 router.get('/profile/:userId', authenticate, async (req, res) => {
-    const { userId } = req.params;
+    const userId = parseInt(req.params.userId);
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId },
@@ -67,7 +67,7 @@ router.get('/profile/:userId', authenticate, async (req, res) => {
 
 // Update user profile
 router.put('/profile/:userId', authenticate, async (req, res) => {
-    const { userId } = req.params;
+    const userId = parseInt(req.params.userId);
     const { name, phone, newPassword } = req.body;
     try {
         const updateData = {};

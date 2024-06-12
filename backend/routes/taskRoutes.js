@@ -11,7 +11,7 @@ router.post('/tasks', async (req, res) => {
             data: {
                 title,
                 description,
-                user: { connect: { id: userId } },
+                user: { connect: { id: parseInt(userId) } },
                 status: 'TO_DO'
             }
         });
@@ -23,9 +23,10 @@ router.post('/tasks', async (req, res) => {
 
 // Get all tasks for a user
 router.get('/tasks/:userId', async (req, res) => {
+    const userId = parseInt(req.params.userId);
     try {
         const tasks = await prisma.task.findMany({
-            where: { userId: req.params.userId }
+            where: { userId: userId }
         });
         res.json(tasks);
     } catch (error) {
@@ -36,9 +37,10 @@ router.get('/tasks/:userId', async (req, res) => {
 // Update a task
 router.put('/tasks/:taskId', async (req, res) => {
     const { title, description, status } = req.body;
+    const taskId = parseInt(req.params.taskId);
     try {
         const task = await prisma.task.update({
-            where: { id: req.params.taskId },
+            where: { id: taskId },
             data: { title, description, status }
         });
         res.json(task);
@@ -49,9 +51,10 @@ router.put('/tasks/:taskId', async (req, res) => {
 
 // Delete a task
 router.delete('/tasks/:taskId', async (req, res) => {
+    const taskId = parseInt(req.params.taskId);
     try {
         await prisma.task.delete({
-            where: { id: req.params.taskId }
+            where: { id: taskId }
         });
         res.status(204).send();
     } catch (error) {

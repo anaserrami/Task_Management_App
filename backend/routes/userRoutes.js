@@ -26,12 +26,13 @@ router.get('/users', authenticate, async (req, res) => {
 
 // Get user details with tasks
 router.get('/user/:userId', authenticate, async (req, res) => {
+    const userId = parseInt(req.params.userId);
     if (req.userRole !== 'ADMIN') {
         return res.status(403).json({ message: "Unauthorized" });
     }
     try {
         const user = await prisma.user.findUnique({
-            where: { id: req.params.userId },
+            where: { id: userId },
             include: {
                 tasks: true
             }
@@ -48,12 +49,13 @@ router.get('/user/:userId', authenticate, async (req, res) => {
 
 // Delete a user
 router.delete('/user/:userId', authenticate, async (req, res) => {
+    const userId = parseInt(req.params.userId);
     if (req.userRole !== 'ADMIN') {
         return res.status(403).json({ message: "Unauthorized" });
     }
     try {
         await prisma.user.delete({
-            where: { id: req.params.userId }
+            where: { id: userId }
         });
         res.status(204).send();
     } catch (error) {
@@ -61,3 +63,4 @@ router.delete('/user/:userId', authenticate, async (req, res) => {
     }
 });
 
+module.exports = router;

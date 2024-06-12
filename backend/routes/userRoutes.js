@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 // Get all users
 router.get('/users', authenticate, async (req, res) => {
     if (req.userRole !== 'ADMIN') {
+        console.log("Token: ", token);
+        console.log("Decoded token: ", decoded);
+        console.log("User role from token: ", req.userRole);
         return res.status(403).json({ message: "Unauthorized" });
     }
     try {

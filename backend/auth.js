@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 // Generate JWT token
 const generateToken = (userId, role) => {
-    return jwt.sign({ id: userId, role: role }, process.env.JWT_SECRET, { expiresIn: '5d' });
+    return jwt.sign({ id: parseInt(userId), role: role }, process.env.JWT_SECRET, { expiresIn: '5d' });
 };
 
 // Hash password

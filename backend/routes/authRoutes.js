@@ -19,7 +19,7 @@ router.post('/signup', async (req, res) => {
                 role: 'ADMIN'
             }
         });
-        const token = generateToken(user.id);
+        const token = generateToken(user.id, user.role);
         res.status(201).json({ user, token });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
     try {
         const user = await prisma.user.findUnique({ where: { email } });
         if (user && await comparePassword(password, user.password)) {
-            const token = generateToken(user.id);
+            const token = generateToken(user.id, user.role);
             res.json({ user, token });
         } else {
             res.status(401).json({ message: 'Invalid credentials' });

@@ -6,6 +6,8 @@ import Profile from './components/Profile';
 import AdminDashboard from './components/AdminDashboard';
 import UserDashboard from './components/UserDashboard';
 import UserDetails from './components/UserDetails';
+import AddTask from './components/AddTask';
+import EditTask from './components/EditTask';
 import './App.css';
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
                 <Route path="/user" element={user ? <UserDashboard user={user} /> : <Login setUser={setUser} />} />
                 <Route path="/profile" element={user ? <Profile user={user} /> : <Login setUser={setUser} />} />
                 <Route path="/UserDetails/:userId" element={user ? <UserDetails user={user} /> : <Login setUser={setUser} />} />
+                <Route path="/EditTask/:taskId" element={user ? <EditTask user={user} /> : <Login setUser={setUser} />} />
+                <Route path="/AddTask" element={user ? <AddTask user={user} /> : <Login setUser={setUser} />} />
             </Routes>
         </Router>
     );

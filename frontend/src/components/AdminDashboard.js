@@ -89,7 +89,7 @@ function AdminDashboard({ user }) {
                                 <thead className="bg-blue-100">
                                 <tr>
                                     <th scope="col"
-                                        className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                        className="px-6 py-3 text-2xs font-bold text-gray-500 uppercase tracking-wider">
                                         #
                                     </th>
                                     <th scope="col"

@@ -5,3 +5,22 @@
 .login-width{
   width: 42rem;
 }
+
+.height-page{
+  height: 90vh;
+}
+
+.status-todo {
+  color: #D32F2F; /* Red */
+  font-weight: bold;
+}
+
+.status-in-progress {
+  color: #FFA000; /* Yellow */
+  font-weight: bold;
+}
+
+.status-done {
+  color: #388E3C; /* Green */
+  font-weight: bold;
+}

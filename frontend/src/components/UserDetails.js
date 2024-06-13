@@ -15,48 +15,65 @@ function UserDetails({ user }) {
                 }
             });
             setTasks(res.data.tasks);
-            console.log("res", res.data);
-            console.log("Tasks: ", tasks);
-            console.log("User ID: ", userId);
         };
 
         fetchTasks();
     }, [userId]);
 
+    // Function to determine the class based on status
+    const getStatusClass = (status) => {
+        switch (status) {
+            case 'TO_DO':
+                return 'status-todo';
+            case 'IN_PROGRESS':
+                return 'status-in-progress';
+            case 'DONE':
+                return 'status-done';
+            default:
+                return '';
+        }
+    };
+
     return (
-        <div>
+        <div className="bg-gray-3">
             <Navbar user={user}/>
-            <div className="flex justify-center items-center">
-                <div className="overflow-x-auto max-w-4xl mx-auto my-5">
-                    <div className="inline-block min-w-full align-middle shadow-lg sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200 text-center shadow-lg sm:rounded-lg">
-                            <thead className="bg-blue-100">
-                            <tr>
-                                <th scope="col"
-                                    className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">#
-                                </th>
-                                <th scope="col"
-                                    className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Title
-                                </th>
-                                <th scope="col"
-                                    className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Description
-                                </th>
-                                <th scope="col"
-                                    className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Status
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                            {tasks.map((task, index) => (
-                                <tr key={index}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">{index + 1}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.title}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.description}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.status}</td>
+            <div className="flex justify-center items-center height-page">
+                <div className="overflow-x-auto shadow-lg sm:rounded-lg max-w-4xl mx-auto bg-gray-3">
+                    <div className="inline-block min-w-full align-middle">
+                        <div className="overflow-hidden">
+                            <table className="min-w-full divide-y divide-gray-200 text-center bg-white">
+                                <thead className="bg-blue-100">
+                                <tr>
+                                    <th scope="col"
+                                        className="px-6 py-3 text-2xs font-bold text-gray-500 uppercase tracking-wider">
+                                        #
+                                    </th>
+                                    <th scope="col"
+                                        className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                        Title
+                                    </th>
+                                    <th scope="col"
+                                        className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                        Description
+                                    </th>
+                                    <th scope="col"
+                                        className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
                                 </tr>
-                            ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="bg-blue divide-y divide-blue-200">
+                                {tasks.map((task, index) => (
+                                    <tr key={index} className="odd:bg-blue odd:dark:bg-blue-50 even:bg-blue-50 even:dark:bg-blue-50">
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-sm font-bold text-gray-500">{index + 1}</td>
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 overflow-hidden text-overflow:ellipsis">{task.title}</td>
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 overflow-hidden text-overflow:ellipsis">{task.description}</td>
+                                        <td className={`px-6 py-4 whitespace-pre-wrap text-sm ${getStatusClass(task.status)}`}>{task.status}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

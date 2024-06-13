@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Logo from '../assets/logo.png';
 import loginLogo from '../assets/login.png';
 import axios from 'axios';
 
-function Login() {
+function Login({ setUser }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:5000/api/login', { email, password });
             localStorage.setItem('token', response.data.token);
-            window.location.href = response.data.user.role === 'ADMIN' ? '/admin' : '/user';
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            setUser(response.data.user);
+            navigate(response.data.user.role === 'ADMIN' ? '/admin' : '/user');
         } catch (error) {
             console.error('Login failed:', error);
             setError('Login failed!');

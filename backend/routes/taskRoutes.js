@@ -21,6 +21,24 @@ router.post('/tasks', async (req, res) => {
     }
 });
 
+// Get a single task by ID
+router.get('/tasks/details/:taskId', async (req, res) => {
+    const taskId = parseInt(req.params.taskId);
+    try {
+        const task = await prisma.task.findUnique({
+            where: { id: taskId }
+        });
+        if (task) {
+            res.json(task);
+        } else {
+            res.status(404).json({ error: 'Task not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 // Get all tasks for a user
 router.get('/tasks/:userId', async (req, res) => {
     const userId = parseInt(req.params.userId);
@@ -45,6 +63,7 @@ router.put('/tasks/:taskId', async (req, res) => {
         });
         res.json(task);
     } catch (error) {
+        console.error('Error updating task:', error);
         res.status(500).json({ error: error.message });
     }
 });

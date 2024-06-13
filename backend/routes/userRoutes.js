@@ -18,6 +18,7 @@ router.get('/users', authenticate, async (req, res) => {
                 id: true,
                 name: true,
                 email: true,
+                phone: true,
                 role: true
             }
         });

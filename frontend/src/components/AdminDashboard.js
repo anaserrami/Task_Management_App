@@ -62,11 +62,11 @@ function AdminDashboard({ user }) {
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
     return (
-        <div>
+        <div className="bg-gray-3">
             <Navbar user={user}/>
-            <div className="flex justify-center items-center">
-                <div className="overflow-x-auto max-w-4xl mx-auto my-5">
-                    <div className="pb-4 bg-white dark:bg-gray-900 ml-1">
+            <div className="flex justify-center items-center height-page">
+                <div className="overflow-x-auto max-w-4xl mx-auto my-5 bg-gray-3">
+                    <div className="pb-4 bg-gray-3 dark:bg-gray-900 ml-1">
                         <label htmlFor="table-search" className="sr-only">Search</label>
                         <div className="relative mt-1">
                             <div
@@ -85,7 +85,7 @@ function AdminDashboard({ user }) {
                     </div>
                     <div className="inline-block min-w-full align-middle shadow-lg sm:rounded-lg">
                         <div className="overflow-hidden shadow-lg sm:rounded-lg">
-                            <table className="min-w-full divide-y divide-gray-200 text-center shadow-lg sm:rounded-lg">
+                            <table className="min-w-full divide-y divide-gray-200 text-center shadow-lg sm:rounded-lg bg-white">
                                 <thead className="bg-blue-100">
                                 <tr>
                                     <th scope="col"
@@ -129,7 +129,7 @@ function AdminDashboard({ user }) {
                                 ))}
                                 </tbody>
                             </table>
-                            <div className="flex items-center justify-center gap-3 mt-6">
+                            <div className="flex items-center justify-center gap-3 mt-4">
                                 <button
                                     className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                     type="button">

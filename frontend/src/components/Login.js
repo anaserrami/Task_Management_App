@@ -7,6 +7,7 @@ import axios from 'axios';
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -16,8 +17,12 @@ function Login() {
             window.location.href = response.data.user.role === 'ADMIN' ? '/admin' : '/user';
         } catch (error) {
             console.error('Login failed:', error);
-            alert('Login failed!');
+            setError('Login failed!');
         }
+    };
+
+    const clearError = () => {
+        setError('');
     };
 
     return (
@@ -34,6 +39,16 @@ function Login() {
                 </div>
                 <div className="w-full p-8 lg:w-1/2">
                     <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Sign In to Task Maker</h2>
+                    {error && (
+                        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 relative" role="alert">
+                            <span>{error}</span>
+                            <button onClick={clearError} className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
                     <form onSubmit={handleLogin} className="space-y-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Email</label>

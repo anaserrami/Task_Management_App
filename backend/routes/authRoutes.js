@@ -1,6 +1,5 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
-const { authenticate } = require('../middlewares/middleware');
 const { generateToken, hashPassword, comparePassword } = require('../auth');
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -64,7 +63,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Get user profile
-router.get('/profile/:userId', authenticate, async (req, res) => {
+router.get('/profile/:userId', async (req, res) => {
     const userId = parseInt(req.params.userId);
     try {
         const user = await prisma.user.findUnique({
@@ -87,7 +86,7 @@ router.get('/profile/:userId', authenticate, async (req, res) => {
 });
 
 // Update user profile
-router.put('/profile/:userId', authenticate, async (req, res) => {
+router.put('/profile/:userId', async (req, res) => {
     const userId = parseInt(req.params.userId);
     const { name, phone, newPassword } = req.body;
     try {

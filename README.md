@@ -1,5 +1,6 @@
 # Task-Manager-App
 Ce projet est une application de gestion de tâches qui permet aux utilisateurs de créer, lire, mettre à jour et supprimer des tâches.
+![Conception.png](Conception.png)
 
 ## Les étapes pour démarrer ce projet
 

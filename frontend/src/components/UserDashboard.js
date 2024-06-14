@@ -7,7 +7,7 @@ function UserDashboard({ user }) {
     const [tasks, setTasks] = useState([]);
     const [filteredTasks, setFilteredTasks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [tasksPerPage] = useState(8);
+    const [tasksPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -54,6 +54,27 @@ function UserDashboard({ user }) {
         }
     };
 
+    const handleStatusChange = async (taskId, newStatus) => {
+        try {
+            await axios.put(`http://localhost:5000/api/tasks/${taskId}`, {
+                status: newStatus
+            }, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            });
+            const updatedTasks = tasks.map(task => {
+                if (task.id === taskId) {
+                    return { ...task, status: newStatus };
+                }
+                return task;
+            });
+            setTasks(updatedTasks);
+            setSuccessMessage("Task status updated successfully.");
+        } catch (error) {
+            console.error("Error updating task status: ", error);
+            setErrorMessage("Failed to update task status.");
+        }
+    };
+
     const getStatusClass = (status) => {
         switch (status) {
             case 'TO_DO':
@@ -84,26 +105,6 @@ function UserDashboard({ user }) {
             <Navbar user={user}/>
             <div className="flex justify-center mt-20 height-page">
                 <div className="mx-auto my-5 bg-gray-3 width-table">
-                    {errorMessage && (
-                        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 relative" role="alert">
-                            <span>{errorMessage}</span>
-                            <button onClick={clearErrorMessage} className="absolute top-0 bottom-0 right-0 px-4 py-3">
-                                <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
-                    {successMessage && (
-                        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 relative" role="alert">
-                            <span>{successMessage}</span>
-                            <button onClick={clearSuccessMessage} className="absolute top-0 bottom-0 right-0 px-4 py-3">
-                                <svg className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
                     <div className="pb-4 bg-gray-3 dark:bg-gray-900 ml-1 flex flex-row justify-between items-center">
                         <div className="relative flex-grow">
                             <div
@@ -119,7 +120,7 @@ function UserDashboard({ user }) {
                                    placeholder="Search for a task" onChange={e => setSearchTerm(e.target.value)}
                                    value={searchTerm}/>
                         </div>
-                        <Link to="/AddTask" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add New Task</Link>
+                        <Link to="/AddTask" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add New Task</Link>
                     </div>
                     <div className="inline-block min-w-full align-middle sm:rounded-lg">
                         <div className="overflow-hidden sm:rounded-lg">
@@ -141,6 +142,10 @@ function UserDashboard({ user }) {
                                     </th>
                                     <th scope="col"
                                         className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                        Date of Creation
+                                    </th>
+                                    <th scope="col"
+                                        className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
                                         Status
                                     </th>
                                     <th scope="col"
@@ -153,25 +158,48 @@ function UserDashboard({ user }) {
                                 {currentTasks.map((task, index) => (
                                     <tr key={index}
                                         className="odd:bg-blue odd:dark:bg-blue-50 even:bg-blue-50 even:dark:bg-blue-50">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">{index + 1 + (currentPage - 1) * tasksPerPage}</td>
-                                        <td className="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 overflow-hidden text-overflow:ellipsis">{task.title}</td>
-                                        <td className="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 overflow-hidden text-overflow:ellipsis">{task.description}</td>
-                                        <td className={`px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 ${getStatusClass(task.status)}`}>{task.status}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <Link to={`/EditTask/${task.id}`}
-                                                  className="text-indigo-600 hover:text-indigo-900 px-3">Edit</Link>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">
+                                            {index + 1 + (currentPage - 1) * tasksPerPage}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-base text-gray-500 overflow-hidden text-overflow:ellipsis">
+                                            {task.title}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-base text-gray-500 overflow-hidden text-overflow:ellipsis">
+                                            {task.description}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-base text-gray-500 overflow-hidden text-overflow:ellipsis">
+                                            {task.creationDate.split("T")[0]}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                            <select
+                                                className={`border border-gray-300 rounded-lg text-gray-700 h-full pl-3 pr-8 bg-white focus:outline-none appearance-none ${task.status === 'DONE' ? 'cursor-not-allowed' : ''}`}
+                                                onChange={e => handleStatusChange(task.id, e.target.value)}
+                                                value={task.status}
+                                                disabled={task.status === 'DONE'}
+                                            >
+                                                <option value="TO_DO">TO DO</option>
+                                                <option value="IN_PROGRESS">IN PROGRESS</option>
+                                                <option value="DONE">DONE</option>
+                                            </select>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-base font-medium">
+                                            {task.status !== 'DONE' && (
+                                                <Link to={`/EditTask/${task.id}`}
+                                                      className="text-indigo-600 hover:text-indigo-900 px-3">Edit</Link>
+                                            )}
                                             <button onClick={() => handleDeleteTask(task.id)}
-                                                    className="text-red-600 hover:text-red-900">Delete
+                                                    className="text-red-600 hover:text-red-900 ml-4">Delete
                                             </button>
                                         </td>
                                     </tr>
                                 ))}
                                 </tbody>
+
                             </table>
                             <div className="flex items-center justify-center gap-3 mt-4">
-                                <button onClick={() =>  currentPage > 1 ?  paginate(currentPage - 1): ''}
-                                    className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    type="button">
+                                <button onClick={() => currentPage > 1 ? paginate(currentPage - 1) : null}
+                                        className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                        type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          strokeWidth="2" stroke="currentColor"
                                          aria-hidden="true" className="w-4 h-4">
@@ -189,9 +217,9 @@ function UserDashboard({ user }) {
                                         </button>
                                     ))}
                                 </div>
-                                <button onClick={() => currentPage <totalPages ? paginate(currentPage + 1) : ''}
-                                    className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    type="button">
+                                <button onClick={() => currentPage < totalPages ? paginate(currentPage + 1) : null}
+                                        className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                        type="button">
                                     Next
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          strokeWidth="2" stroke="currentColor"

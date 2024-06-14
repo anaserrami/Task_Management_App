@@ -30,11 +30,12 @@ cd backend
 npm i
 ```
 
-Et dans le fichier `.env` qui contient `DATABASE_URL` le lien pour la base de données (mettez le nom d'utilisateur et le mot de passe de votre base de données dans `DATABASE_URL` ) et `TOKEY_KEY`, alors remplir par le code suivant :
+Et créer un fichier `.env` qui contient `DATABASE_URL` le lien pour la base de données (mettez le nom d'utilisateur et le mot de passe de votre base de données dans `DATABASE_URL` ) et `TOKEY_KEY`, alors remplir par le code suivant :
 ```bash
 DATABASE_URL="mysql://username:yourpassword@host:port/database_name"
 TOKEN_KEY = "your_token_key"
 ```
+pour mysql url database est par défaut `mysql://root:@localhost:3306/database_name`
 
 Apres il faut faire la migration de la base donnees avec la commande suivant:
 ```bash

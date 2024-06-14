@@ -9,18 +9,22 @@ function AdminDashboard({ user }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [usersPerPage] = useState(8);
     const [searchTerm, setSearchTerm] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const res = await axios.get('http://localhost:5000/api/users', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            setUsers(res.data);
-            setFilteredUsers(res.data);
+            try {
+                const res = await axios.get('http://localhost:5000/api/users', {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
+                setUsers(res.data);
+                setFilteredUsers(res.data);
+            } catch (error) {
+                console.error("Error fetching users: ", error);
+                setErrorMessage("Failed to load users.");
+            }
         };
-
         fetchUsers();
     }, []);
 
@@ -44,10 +48,10 @@ function AdminDashboard({ user }) {
                 const newUsers = users.filter(user => user.id !== userId);
                 setUsers(newUsers);
                 setFilteredUsers(newUsers);
-                alert("User deleted successfully.");
+                setSuccessMessage("User deleted successfully.");
             } catch (error) {
                 console.error("Error deleting user: ", error);
-                alert("Failed to delete user.");
+                setErrorMessage("Failed to delete user.");
             }
         }
     };
@@ -61,11 +65,34 @@ function AdminDashboard({ user }) {
     // Calculate total pages
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
+    const clearErrorMessage = () => {setErrorMessage('');};
+    const clearSuccessMessage = () => {setSuccessMessage('');};
+
     return (
         <div className="bg-gray-3">
             <Navbar user={user}/>
             <div className="flex justify-center height-page">
                 <div className="width-table mx-auto my-5 bg-gray-3">
+                    {errorMessage && (
+                        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 relative" role="alert">
+                            <span>{errorMessage}</span>
+                            <button onClick={clearErrorMessage} className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
+                    {successMessage && (
+                        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 relative" role="alert">
+                            <span>{successMessage}</span>
+                            <button onClick={clearSuccessMessage} className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                <svg className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
                     <div className="pb-4 bg-gray-3 dark:bg-gray-900 ml-1">
                         <label htmlFor="table-search" className="sr-only">Search</label>
                         <div className="relative mt-1">

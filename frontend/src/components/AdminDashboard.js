@@ -64,8 +64,8 @@ function AdminDashboard({ user }) {
     return (
         <div className="bg-gray-3">
             <Navbar user={user}/>
-            <div className="flex justify-center items-center height-page">
-                <div className="overflow-x-auto max-w-4xl mx-auto my-5 bg-gray-3">
+            <div className="flex justify-center height-page">
+                <div className="width-table mx-auto my-5 bg-gray-3">
                     <div className="pb-4 bg-gray-3 dark:bg-gray-900 ml-1">
                         <label htmlFor="table-search" className="sr-only">Search</label>
                         <div className="relative mt-1">
@@ -83,8 +83,8 @@ function AdminDashboard({ user }) {
                                    value={searchTerm}/>
                         </div>
                     </div>
-                    <div className="inline-block min-w-full align-middle shadow-lg sm:rounded-lg">
-                        <div className="overflow-hidden shadow-lg sm:rounded-lg">
+                    <div className="inline-block min-w-full align-middle sm:rounded-lg">
+                        <div className="overflow-hidden sm:rounded-lg">
                             <table className="min-w-full divide-y divide-gray-200 text-center shadow-lg sm:rounded-lg bg-white">
                                 <thead className="bg-blue-100">
                                 <tr>
@@ -130,7 +130,7 @@ function AdminDashboard({ user }) {
                                 </tbody>
                             </table>
                             <div className="flex items-center justify-center gap-3 mt-4">
-                                <button
+                                <button onClick={() =>  currentPage > 1 ?  paginate(currentPage - 1): ''}
                                     className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                     type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -150,7 +150,7 @@ function AdminDashboard({ user }) {
                                         </button>
                                     ))}
                                 </div>
-                                <button
+                                <button onClick={() => currentPage <totalPages ? paginate(currentPage + 1) : ''}
                                     className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                     type="button">
                                     Next

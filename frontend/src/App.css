@@ -10,6 +10,15 @@
   height: 90vh;
 }
 
+.height-page2{
+  height: 79vh;
+}
+
+.width-table{
+  width: 80%;
+  min-width: 350px
+}
+
 .status-todo {
   color: #D32F2F; /* Red */
   font-weight: bold;
@@ -23,4 +32,14 @@
 .status-done {
   color: #388E3C; /* Green */
   font-weight: bold;
+}
+
+.pos{
+  position: absolute;
+  top: 90%;
+  right: 10px;
+}
+
+.pos2{
+  position: relative;
 }

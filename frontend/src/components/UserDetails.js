@@ -20,7 +20,6 @@ function UserDetails({ user }) {
         fetchTasks();
     }, [userId]);
 
-    // Function to determine the class based on status
     const getStatusClass = (status) => {
         switch (status) {
             case 'TO_DO':
@@ -37,11 +36,11 @@ function UserDetails({ user }) {
     return (
         <div className="bg-gray-3">
             <Navbar user={user}/>
-            <div className="flex justify-center items-center height-page">
-                <div className="overflow-x-auto shadow-lg sm:rounded-lg max-w-4xl mx-auto bg-gray-3">
-                    <div className="inline-block min-w-full align-middle">
-                        <div className="overflow-hidden">
-                            <table className="min-w-full divide-y divide-gray-200 text-center bg-white">
+            <div className="flex justify-center mt-20 height-page2">
+                <div className="width-table mx-auto my-5 bg-gray-3">
+                    <div className="inline-block min-w-full align-middle sm:rounded-lg">
+                        <div className="overflow-hidden sm:rounded-lg">
+                            <table className="min-w-full divide-y divide-gray-200 text-center shadow-2xl sm:rounded-lg bg-white">
                                 <thead className="bg-blue-100">
                                 <tr>
                                     <th scope="col"
@@ -65,7 +64,7 @@ function UserDetails({ user }) {
                                 <tbody className="bg-blue divide-y divide-blue-200">
                                 {tasks.map((task, index) => (
                                     <tr key={index} className="odd:bg-blue odd:dark:bg-blue-50 even:bg-blue-50 even:dark:bg-blue-50">
-                                        <td className="px-6 py-4 whitespace-pre-wrap text-sm font-bold text-gray-500">{index + 1}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">{index + 1}</td>
                                         <td className="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 overflow-hidden text-overflow:ellipsis">{task.title}</td>
                                         <td className="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 overflow-hidden text-overflow:ellipsis">{task.description}</td>
                                         <td className={`px-6 py-4 whitespace-pre-wrap text-sm ${getStatusClass(task.status)}`}>{task.status}</td>

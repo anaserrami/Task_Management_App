@@ -26,6 +26,27 @@ router.post('/signup', async (req, res) => {
     }
 });
 
+// Admin signup
+router.post('/signup/admin', async (req, res) => {
+    const { name, email, phone, password } = req.body;
+    try {
+        const hashedPassword = await hashPassword(password);
+        const user = await prisma.user.create({
+            data: {
+                name,
+                email,
+                phone,
+                password: hashedPassword,
+                role: 'ADMIN'
+            }
+        });
+        const token = generateToken(user.id, user.role);
+        res.status(201).json({ user, token });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // User login
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;

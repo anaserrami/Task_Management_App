@@ -9,6 +9,8 @@ function Login({ setUser }) {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 
     const handleLogin = async (event) => {
         event.preventDefault();

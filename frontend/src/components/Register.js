@@ -11,6 +11,8 @@ function Register() {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 
     const handleRegister = async (event) => {
         event.preventDefault();

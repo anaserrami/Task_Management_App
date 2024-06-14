@@ -9,17 +9,21 @@ function UserDashboard({ user }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [tasksPerPage] = useState(8);
     const [searchTerm, setSearchTerm] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         const fetchTasks = async () => {
-            const res = await axios.get(`http://localhost:5000/api/tasks/${user.id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            setTasks(res.data);
+            try {
+                const res = await axios.get(`http://localhost:5000/api/tasks/${user.id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
+                setTasks(res.data);
+            } catch (error) {
+                console.error("Error fetching tasks: ", error);
+                setErrorMessage("Failed to load tasks.");
+            }
         };
-
         fetchTasks();
     }, [user.id]);
 
@@ -32,7 +36,6 @@ function UserDashboard({ user }) {
     }, [searchTerm, tasks]);
 
     const handleDeleteTask = async (taskId) => {
-        // Confirmation dialog before deleting
         if (window.confirm("Are you sure you want to delete this task?")) {
             try {
                 await axios.delete(`http://localhost:5000/api/tasks/${taskId}`, {
@@ -43,10 +46,10 @@ function UserDashboard({ user }) {
                 const newTasks = tasks.filter(task => task.id !== taskId);
                 setTasks(newTasks);
                 setFilteredTasks(newTasks);
-                alert("Task deleted successfully.");
+                setSuccessMessage("Task deleted successfully.");
             } catch (error) {
                 console.error("Error deleting task: ", error);
-                alert("Failed to delete task.");
+                setErrorMessage("Failed to delete task.");
             }
         }
     };
@@ -73,11 +76,34 @@ function UserDashboard({ user }) {
     // Calculate total pages
     const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
 
+    const clearErrorMessage = () => {setErrorMessage('');};
+    const clearSuccessMessage = () => {setSuccessMessage('');};
+
     return (
         <div className="bg-gray-3">
             <Navbar user={user}/>
             <div className="flex justify-center mt-20 height-page">
                 <div className="mx-auto my-5 bg-gray-3 width-table">
+                    {errorMessage && (
+                        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 relative" role="alert">
+                            <span>{errorMessage}</span>
+                            <button onClick={clearErrorMessage} className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
+                    {successMessage && (
+                        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 relative" role="alert">
+                            <span>{successMessage}</span>
+                            <button onClick={clearSuccessMessage} className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                <svg className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
                     <div className="pb-4 bg-gray-3 dark:bg-gray-900 ml-1 flex flex-row justify-between items-center">
                         <div className="relative flex-grow">
                             <div
@@ -89,7 +115,7 @@ function UserDashboard({ user }) {
                                 </svg>
                             </div>
                             <input type="text" id="table-search"
-                                   className="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-60 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                   className="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    placeholder="Search for a task" onChange={e => setSearchTerm(e.target.value)}
                                    value={searchTerm}/>
                         </div>
@@ -143,7 +169,7 @@ function UserDashboard({ user }) {
                                 </tbody>
                             </table>
                             <div className="flex items-center justify-center gap-3 mt-4">
-                                <button
+                                <button onClick={() =>  currentPage > 1 ?  paginate(currentPage - 1): ''}
                                     className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                     type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -163,7 +189,7 @@ function UserDashboard({ user }) {
                                         </button>
                                     ))}
                                 </div>
-                                <button
+                                <button onClick={() => currentPage <totalPages ? paginate(currentPage + 1) : ''}
                                     className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-full select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                     type="button">
                                     Next

@@ -36,7 +36,7 @@ function UserDetails({ user }) {
     return (
         <div className="bg-gray-3">
             <Navbar user={user}/>
-            <div className="flex justify-center mt-20 height-page2">
+            <div className="flex justify-center mt-6 height-page2">
                 <div className="width-table mx-auto my-5 bg-gray-3">
                     <div className="inline-block min-w-full align-middle sm:rounded-lg">
                         <div className="overflow-hidden sm:rounded-lg">
@@ -57,17 +57,23 @@ function UserDetails({ user }) {
                                     </th>
                                     <th scope="col"
                                         className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                        Date of Creation
+                                    </th>
+                                    <th scope="col"
+                                        className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
                                         Status
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody className="bg-blue divide-y divide-blue-200">
                                 {tasks.map((task, index) => (
-                                    <tr key={index} className="odd:bg-blue odd:dark:bg-blue-50 even:bg-blue-50 even:dark:bg-blue-50">
+                                    <tr key={index}
+                                        className="odd:bg-blue odd:dark:bg-blue-50 even:bg-blue-50 even:dark:bg-blue-50">
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">{index + 1}</td>
-                                        <td className="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 overflow-hidden text-overflow:ellipsis">{task.title}</td>
-                                        <td className="px-6 py-4 whitespace-pre-wrap text-sm text-gray-500 overflow-hidden text-overflow:ellipsis">{task.description}</td>
-                                        <td className={`px-6 py-4 whitespace-pre-wrap text-sm ${getStatusClass(task.status)}`}>{task.status}</td>
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-base text-gray-500 overflow-hidden text-overflow:ellipsis">{task.title}</td>
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-base text-gray-500 overflow-hidden text-overflow:ellipsis">{task.description}</td>
+                                        <td className="px-6 py-4 whitespace-pre-wrap text-base text-gray-500 overflow-hidden text-overflow:ellipsis">{task.creationDate.split("T")[0]}</td>
+                                        <td className={`px-6 py-4 whitespace-pre-wrap text-base ${getStatusClass(task.status)}`}>{task.status}</td>
                                     </tr>
                                 ))}
                                 </tbody>

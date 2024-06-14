@@ -20,8 +20,15 @@ const userData = () => ({
     name: faker.person.fullName(),
     email: faker.internet.email(),
     phone: faker.phone.number(),
-    role: faker.helpers.arrayElement(['ADMIN', 'USER'])
+    role: 'USER'
 });
+
+const adminData = {
+    name: "Admin User",
+    email: "admin@gmail.com",
+    phone: "123-456-7890",
+    role: "ADMIN"
+};
 
 const taskData = (userId) => ({
     title: faker.lorem.sentence(),
@@ -35,8 +42,20 @@ const createUsersWithTasks = async () => {
     try {
         const users = [];
 
-        // Generate 10 users
-        for (let i = 0; i < 10; i++) {
+        // Create admin user
+        const hashedAdminPassword = await hashPassword("admin");
+        const adminUser = await prisma.user.create({
+            data: {
+                ...adminData,
+                password: hashedAdminPassword
+            }
+        });
+        users.push(adminUser);
+
+        console.log(`Admin created with email: ${adminUser.email} and password: 'admin'`);
+
+        // Generate 9 more users
+        for (let i = 0; i < 9; i++) {
             const plainPassword = faker.internet.password();
             const hashedPassword = await hashPassword(plainPassword);
             const user = await prisma.user.create({

@@ -9,6 +9,8 @@ function EditTask({ user }) {
     const [status, setStatus] = useState('');
     const { taskId } = useParams();
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         const fetchTask = async () => {
@@ -31,19 +33,31 @@ function EditTask({ user }) {
             await axios.put(`http://localhost:5000/api/tasks/${taskId}`,
                 { title, description, status },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
-            alert('Task updated successfully');
+            //setSuccessMessage('Task updated successfully');
             navigate('/user');
         } catch (error) {
             console.error('Error updating task:', error);
-            alert('Failed to update task');
+            setErrorMessage('Failed to update task');
         }
     };
+
+    const clearErrorMessage = () => {setErrorMessage('');};
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <Navbar user={user} />
             <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full bg-white rounded-lg shadow-8 overflow-hidden">
+                    {errorMessage && (
+                        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 relative" role="alert">
+                            <span>{errorMessage}</span>
+                            <button onClick={clearErrorMessage} className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
                     <div className="px-6 py-8">
                         <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-6">
                             Edit Task

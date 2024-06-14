@@ -18,8 +18,9 @@ function AdminDashboard({ user }) {
                 const res = await axios.get('http://localhost:5000/api/users', {
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
                 });
-                setUsers(res.data);
-                setFilteredUsers(res.data);
+                const onlyUsers = res.data.filter(user => user.role === 'USER');
+                setUsers(onlyUsers);
+                setFilteredUsers(onlyUsers);
             } catch (error) {
                 console.error("Error fetching users: ", error);
                 setErrorMessage("Failed to load users.");

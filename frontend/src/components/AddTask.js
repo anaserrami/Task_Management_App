@@ -8,6 +8,8 @@ function AddTask({ user }) {
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('TO-DO');
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleAddTask = async (e) => {
         e.preventDefault();
@@ -15,19 +17,31 @@ function AddTask({ user }) {
             const res = await axios.post(`http://localhost:5000/api/tasks`,
                 { title, description, status, userId: user.id },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
-            alert('Task added successfully');
+            //setSuccessMessage('Task added successfully');
             navigate('/user');
         } catch (error) {
             console.error('Error adding task:', error);
-            alert('Failed to add task');
+            setErrorMessage('Failed to add task');
         }
     };
+
+    const clearErrorMessage = () => {setErrorMessage('');};
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <Navbar user={user} />
             <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full bg-white rounded-lg shadow-8 overflow-hidden">
+                    {errorMessage && (
+                        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 relative" role="alert">
+                            <span>{errorMessage}</span>
+                            <button onClick={clearErrorMessage} className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
                     <div className="px-6 py-8">
                         <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-6">
                             Add a New Task
@@ -69,8 +83,6 @@ function AddTask({ user }) {
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 >
                                     <option value="TO_DO">TO-DO</option>
-                                    <option value="IN_PROGRESS">IN-PROGRESS</option>
-                                    <option value="DONE">DONE</option>
                                 </select>
                             </div>
                             <div>

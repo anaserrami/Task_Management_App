@@ -29,8 +29,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login setUser={setUser} />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<ContactUs />} />
+                <Route path="/about" element={user ? <About user={user} /> : <Login setUser={setUser} />} />
+                <Route path="/contact" element={user ? <ContactUs user={user} /> : <Login setUser={setUser} />} />
                 <Route path="/admin" element={user ? <AdminDashboard user={user} /> : <Login setUser={setUser} />} />
                 <Route path="/user" element={user ? <UserDashboard user={user} /> : <Login setUser={setUser} />} />
                 <Route path="/profile/:userId" element={user ? <Profile user={user} /> : <Login setUser={setUser} />} />

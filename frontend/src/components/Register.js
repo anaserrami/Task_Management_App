@@ -39,7 +39,7 @@ function Register() {
         <div className="min-h-screen flex items-center justify-center bg-gray-3">
             <div className="flex items-stretch bg-white shadow-4 rounded-3xl overflow-hidden">
                 <div className="w-full p-8 lg:w-1/2">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Sign-Up for Task Maker</h2>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Sign Up for Task Maker</h2>
                     {error && (
                         <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 relative" role="alert">
                             <span>{error}</span>

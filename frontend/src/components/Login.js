@@ -37,9 +37,8 @@ function Login({ setUser }) {
                     <div className="p-6 flex flex-col items-center justify-center bg-gray-200">
                         <img src={Logo} alt="Logo" className="w-30 mb-4"/>
                         <p className="text-gray-700 text-center">
-                            Welcome to your Task Maker!!! <br/>
+                            Welcome to your Task Maker ! <br/>
                         </p>
-                        <img src={Logo} alt="Logo" className="w-30 mb-4"/>
                         <img src={loginLogo} alt="Login Illustration" className="login-width mt-4"/>
                     </div>
                 </div>

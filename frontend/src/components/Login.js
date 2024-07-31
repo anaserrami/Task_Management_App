@@ -35,11 +35,12 @@ function Login({ setUser }) {
             <div className="flex items-center shadow-4 bg-white rounded-3xl overflow-hidden">
                 <div className="hidden lg:block p-8 lg:w-1/2 bg-indigo-100">
                     <div className="p-6 flex flex-col items-center justify-center bg-gray-200">
-                        <img src={Logo} alt="Logo" className="w-30 mb-4" />
+                        <img src={Logo} alt="Logo" className="w-30 mb-4"/>
                         <p className="text-gray-700 text-center">
-                            Welcome to your Task Maker!!! <br />
+                            Welcome to your Task Maker!!! <br/>
                         </p>
-                        <img src={loginLogo} alt="Login Illustration" className="login-width mt-4" />
+                        <img src={Logo} alt="Logo" className="w-30 mb-4"/>
+                        <img src={loginLogo} alt="Login Illustration" className="login-width mt-4"/>
                     </div>
                 </div>
                 <div className="w-full p-8 lg:w-1/2">
